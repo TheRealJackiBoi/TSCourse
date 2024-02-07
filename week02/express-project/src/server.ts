@@ -4,7 +4,6 @@ import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import log4js from 'log4js';   
-import asyncHandler from 'express-async-handler'
 
 
 //For env File 
@@ -31,7 +30,7 @@ type Person = {
 }
 
 // get persons
-app.get('/persons', asyncHandler(async(req: Request, res: Response) => {
+app.get('/persons', async(req: Request, res: Response) => {
 
   try {
     const response: AxiosResponse<Person> = await axios.get(`${DB_URL}/persons/`)
@@ -43,11 +42,11 @@ app.get('/persons', asyncHandler(async(req: Request, res: Response) => {
     console.log(err)
     res.status(404).send('Person not found')
   }
-}))
+})
 
 
 //get person by id
-app.get('/persons/:id', asyncHandler(async(req: Request, res: Response) => {
+app.get('/persons/:id', async(req: Request, res: Response) => {
 
   const id: string = req.params.id
   try {
@@ -60,11 +59,11 @@ app.get('/persons/:id', asyncHandler(async(req: Request, res: Response) => {
     console.log(err)
     res.status(404).send('Person not found')
   }
-}))
+})
 
 
 //post person
-app.post('/persons', asyncHandler(async(req: Request, res: Response) => {
+app.post('/persons', async(req: Request, res: Response) => {
 
   const person = req.body
   try {
@@ -77,11 +76,11 @@ app.post('/persons', asyncHandler(async(req: Request, res: Response) => {
     console.log(err)
     res.status(400).send("Couldn't post user")
   }
-}))
+})
 
 
 //delete person by id
-app.delete('/persons/:id', asyncHandler(async(req: Request, res: Response) => {
+app.delete('/persons/:id', async(req: Request, res: Response) => {
 
   const id: string = req.params.id
 
@@ -95,7 +94,7 @@ app.delete('/persons/:id', asyncHandler(async(req: Request, res: Response) => {
     console.log(err)
     res.status(400).send("Couldn't delete user")
   }
-}))
+})
 
 
 app.listen(port, () => {
