@@ -1,13 +1,6 @@
 import { MyContext } from "./server"
 
-/*
-TODO: addresses by zipcode
-TODO: add user to address
-TODO: remove user
-TODO: remove user from address
-TODO: get person by phonenumber
-TODO: add new address with new user
-*/
+
 const typeDefs = `#graphql
   type Query {
     """ 
