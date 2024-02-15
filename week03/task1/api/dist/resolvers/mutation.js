@@ -26,6 +26,9 @@ export const Mutation = {
         if (!person) {
             throw new GraphQLError("Person not found");
         }
+        if (person.address) {
+            throw new GraphQLError("Person already has an address");
+        }
         const addressToChange = addresses.find(address => address.id == addressId);
         if (!addressToChange) {
             throw new GraphQLError("Address not found");
@@ -70,6 +73,37 @@ export const Mutation = {
         }
         address.residents.splice(index, 1);
         person.address = undefined;
+        return person;
+    },
+    addressRemove: (parent, { id }, { addresses }) => {
+        const index = addresses.findIndex(a => a.id == id);
+        const address = addresses.find(a => a.id == id);
+        if (index === -1) {
+            throw new GraphQLError("Couldn't find address to delete");
+        }
+        address.residents.forEach(person => {
+            person.address = undefined;
+        });
+        addresses.splice(index, 1);
+        return address;
+    },
+    personCreateWithAddress: (parent, { name, email, age, zip, street, houseNumber }, { persons, addresses }) => {
+        const person = {
+            id: String(persons.length + 1),
+            name: name,
+            email: email,
+            age: age
+        };
+        persons.push(person);
+        const address = {
+            id: String(addresses.length + 1),
+            zip: zip,
+            street: street,
+            houseNumber: houseNumber,
+            residents: [person]
+        };
+        addresses.push(address);
+        person.address = address;
         return person;
     }
 };

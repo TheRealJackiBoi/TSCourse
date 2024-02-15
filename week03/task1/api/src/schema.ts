@@ -44,6 +44,14 @@ const typeDefs = `#graphql
       Removes a person from an address and removes the persons address
     """
     addressRemoveResident(addressId: ID!, personId: ID!): Person
+    """
+      Removes an address by id
+    """
+    addressRemove(id: ID!): Address
+    """
+      Adds a new person to a new address
+    """
+    personCreateWithAddress(name: String!, email: String!, age: Int, zip: Int!, street: String!, houseNumber: String!): Person
   }
 
   type Person {
