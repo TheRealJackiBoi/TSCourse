@@ -5,9 +5,12 @@ import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHt
 import express from 'express';
 import http from 'http';
 import cors from 'cors';
-import { typeDefs, resolvers, Person} from './schema.js';
+import { typeDefs } from './schema.js';
 import { persons, addresses } from './data.js'
-import { Address } from './schema.js'
+import { Address, Person } from './resolvers/types.js'
+import { Query } from './resolvers/query.js';
+import { Mutation } from './resolvers/mutation.js';
+import { AddressResolver } from './resolvers/address.js';
 
 export interface MyContext {
     persons: Person[]
@@ -19,7 +22,11 @@ const httpServer = http.createServer(app);
 
 const server = new ApolloServer<MyContext>({
   typeDefs,
-  resolvers,
+  resolvers: {
+    Query,
+    Mutation,
+    Address: AddressResolver
+  },
   plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 });
 

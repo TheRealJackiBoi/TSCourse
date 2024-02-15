@@ -1,8 +1,8 @@
 # Person and Address assignment
 
-- [ ] TODO: addresses by zipcode
+- [x] TODO: addresses by zipcode
 - [x] TODO: add user to address
-- [ ] TODO: remove user
+- [x] TODO: remove user
 - [ ] TODO: remove user from address
 - [ ] TODO: get person by phonenumber
 - [ ] TODO: add new address with new user

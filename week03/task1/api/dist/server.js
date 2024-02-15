@@ -5,13 +5,20 @@ import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHt
 import express from 'express';
 import http from 'http';
 import cors from 'cors';
-import { typeDefs, resolvers } from './schema.js';
+import { typeDefs } from './schema.js';
 import { persons, addresses } from './data.js';
+import { Query } from './resolvers/query.js';
+import { Mutation } from './resolvers/mutation.js';
+import { AddressResolver } from './resolvers/address.js';
 const app = express();
 const httpServer = http.createServer(app);
 const server = new ApolloServer({
     typeDefs,
-    resolvers,
+    resolvers: {
+        Query,
+        Mutation,
+        Address: AddressResolver
+    },
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 });
 await server.start();
