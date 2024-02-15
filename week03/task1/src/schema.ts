@@ -1,3 +1,4 @@
+import { GraphQLError } from "graphql"
 import { MyContext } from "./server"
 
 
@@ -26,7 +27,15 @@ const typeDefs = `#graphql
       Creates a person with generated id and Returns person
     """
     personCreate(name: String!, email: String!, age: Int): Person
+
+    """
+      Creates an address with generated id and without any residents, returns the address
+    """
     addressCreate(zip: Int!, street: String!, houseNumber: String!): Address
+    """
+      Adds a person to an address given those id's
+    """
+    addressAddPerson(addressId: ID!, personId: ID!): Address
   }
 
   type Person {
@@ -60,6 +69,11 @@ type Address = {
   street: string
   houseNumber: string
   residents: Person[]  
+}
+
+type AddressPersonIDs = {
+  addressId: string
+  personId: string
 }
 
 const resolvers = {
@@ -106,7 +120,28 @@ const resolvers = {
     }
     addresses.push(address)
     return address
-  }
+    },
+  addressAddPerson: (parent: never, { addressId, personId }: AddressPersonIDs , {persons, addresses}: MyContext) => {
+    const person = persons.find(person => person.id == personId)
+
+    if(!person) {
+      throw new GraphQLError("Person not found") 
+    }
+
+    const addressToChange = addresses.find(address => address.id == addressId)
+
+    if (!addressToChange) {
+      throw new GraphQLError("Address not found")
+    }
+
+    if (addressToChange.residents.find(resident => resident.id == person.id)) {
+      throw new GraphQLError("User is already a resident")
+    }
+
+    addressToChange.residents.push(person)
+    person.address = addressToChange
+    return addressToChange
+    }
   }
 }
 
