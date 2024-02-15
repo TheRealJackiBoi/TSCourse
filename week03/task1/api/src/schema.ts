@@ -40,6 +40,10 @@ const typeDefs = `#graphql
       Removes a person
     """
     personRemove(id: ID!): Person
+    """
+      Removes a person from an address and removes the persons address
+    """
+    addressRemoveResident(addressId: ID!, personId: ID!): Person
   }
 
   type Person {

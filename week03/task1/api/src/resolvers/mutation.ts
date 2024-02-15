@@ -66,5 +66,28 @@ export const Mutation = {
     persons.splice(index, 1)
 
     return person
+  }, 
+  addressRemoveResident: (parent: never, {addressId, personId}: AddressPersonIDs, {persons, addresses}: MyContext) => {
+    
+    const address = addresses.find(a => a.id == addressId)
+    const person = persons.find(p => p.id == personId)
+
+    if (!address) {
+      throw new GraphQLError("Couldn't find address")
+    }
+
+    if (!person) {
+      throw new GraphQLError("Couldn't find person")
+    }
+
+    const index = address.residents.findIndex(p => p.id == personId)
+
+    if (index === -1) {
+      throw new GraphQLError("Person not found in address")
+    }
+
+    address.residents.splice(index, 1)
+    person.address = undefined
+    return person
   }
 }
