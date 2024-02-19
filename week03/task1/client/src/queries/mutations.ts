@@ -26,12 +26,25 @@ mutation Mutation(
         id
         street
         zip
-        residents {
-          age
-          id
-          email
-          name
-        }
       }
 }
 `;
+
+export const ADDRESS_ADD_PERSON = gql`
+mutation Mutation($addressId: ID!, $personId: ID!) {
+  addressAddPerson(addressId: $addressId, personId: $personId) {
+    id
+    street
+    zip
+  }
+}
+`
+
+export const PERSON_DELETE = gql`
+  mutation Mutation($personRemoveId: ID!) {
+    personRemove(id: $personRemoveId) {
+      id
+      name
+    }
+  }
+`

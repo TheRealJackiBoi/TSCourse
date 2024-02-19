@@ -4,6 +4,7 @@ import PersonDetail from './components/PersonDetail';
 import PersonsDisplay from './components/PersonsDisplay';
 import CreateAddressForm from './components/CreateAddressForm';
 import CreatePersonForm from './components/CreatePersonForm';
+import AvatarUpload from './components/AvatarUpload';
 
 function App() {
   
@@ -20,6 +21,8 @@ function App() {
     <CreateAddressForm />
     
     <CreatePersonForm />
+
+    <AvatarUpload />
   </div>
   )
 }

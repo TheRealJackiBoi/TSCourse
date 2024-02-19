@@ -26,10 +26,16 @@ export const Mutation = {
         if (!person) {
             throw new GraphQLError("Person not found");
         }
-        if (person.address) {
-            throw new GraphQLError("Person already has an address");
-        }
         const addressToChange = addresses.find(address => address.id == addressId);
+        if (person.address) {
+            const addressToRemove = addresses.find(address => address.id == person.address.id);
+            if (addressToRemove) {
+                const indexToRemove = addressToRemove.residents.findIndex(p => p.id == personId);
+                if (indexToRemove) {
+                    addressToRemove.residents.splice(indexToRemove, 1);
+                }
+            }
+        }
         if (!addressToChange) {
             throw new GraphQLError("Address not found");
         }
