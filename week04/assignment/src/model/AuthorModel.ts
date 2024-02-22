@@ -1,5 +1,6 @@
 import mongoose, { Document, Schema } from "mongoose"
 import { Author } from "../types/types"
+import { Book } from "../types/types"
 
 
 const AuthorSchema = new mongoose.Schema<Author>({
@@ -13,30 +14,55 @@ const AuthorSchema = new mongoose.Schema<Author>({
   },
   books: [{
     type: Schema.Types.ObjectId,
-    ref: "book"
+    ref: 'book'
   }],
+  bookCount: {
+    type: Number,
+    default: 0
+  },
   createdAt: {
     type: Date
-  }
-})
+  }}, { virtuals: {
+          nameAge: { 
+            get() {
+              return this.name + " " + this.age
+            }
+          }
+  }})
+
+
 
 AuthorSchema.pre('save', function(next) {
   this.createdAt = new Date()
   next()
 })
 
-AuthorSchema.post('save', async function(doc, next) {
-  await doc.populate('books')
+AuthorSchema.pre('save', function(next) {
+  (this as any).bookCount = (this as any).books.length
   next()
 })
 
 AuthorSchema.pre(/^find/, function(next) {
   (this as any).populate({
-    path: 'books'
+    path: 'books',
+    select: '-__v'
   })
   next()
 })
 
-const AuthorModel = mongoose.model('author', AuthorSchema)
+AuthorSchema.post('save', async function(doc, next) {
+  await doc.populate({
+    path:'books',
+    select: '-__v'
+  })
+  next()
+})
 
-export default AuthorModel
+AuthorSchema.static('moreThanTwoBooks', function() {
+  return this.find({bookCount: {$gte: 2}})
+})
+
+
+//export const AuthorModel = mongoose.model('author', AuthorSchema)
+
+export default AuthorSchema

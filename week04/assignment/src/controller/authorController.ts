@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb";
 import BookModel from "../model/BookModel";
 import { Author } from "../types/types";
-import AuthorModel from "../model/AuthorModel";
+import { AuthorModel } from "../server";
 
 
 export const addBookToAuthor = async (authorId: ObjectId, bookId: ObjectId): Promise<Author> => {

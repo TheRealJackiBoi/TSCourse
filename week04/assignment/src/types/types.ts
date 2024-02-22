@@ -25,9 +25,13 @@ export interface Book {
 
 export interface Author {
   _id?: ObjectId,
-  name: string,
+  name: {
+    first: string,
+    last: string
+  },
   age: number,
   books: [ObjectId| Book],
+  bookCount: number,
   createdAt?: Date
 }
 
@@ -35,5 +39,6 @@ export interface Library {
   _id?: ObjectId,
   name: String,
   books: [ObjectId | Book],
+  bookCount: number,
   createdAt: Date
 }
