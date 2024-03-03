@@ -34,7 +34,6 @@ export class TaskManager {
     addTask({title, description}: ITask) {
       this.tasks = [...this.tasks, taskFactory(this.tasks.length, title, description)]
       this.notify()
-      console.log(this.tasks)
     }
 
     editTask(id: number, task: ITask) {
